@@ -1,0 +1,2 @@
+C:\Users\corbe\source\repos\NodejsWebApp1\NodejsWebApp1\obj\Debug\NodejsWebApp1.njsproj.AssemblyReference.cache
+C:\Users\corbe\source\repos\NodejsWebApp1\NodejsWebApp1\obj\Debug\NodejsWebApp1.njsproj.CoreCompileInputs.cache

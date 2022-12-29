@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>EtherSwap Mainnet</title>
+</head>
+<body>
+    <!-- Display a message indicating that the visitor needs to have MetaMask installed and connected -->
+    <p id="no-metamask" style="display: none;">Please install and connect MetaMask to use EtherSwap Mainnet</p>
+
+    <!-- Display a form for the visitor to enter the amount of tokens they want to swap -->
+    <form id="swap-form" style="display: none;">
+        <label for="amount">Enter the amount of tokens you want to swap:</label>
+        <input type="text" id="amount" name="amount" required>
+        <button type="submit">Swap</button>
+    </form>
+
+    <!-- Display a message indicating the status of the swap transaction -->
+    <p id="status"></p>
+
+    <script>
+        // Check if the visitor has MetaMask installed and connected
+        if (typeof web3 !== 'undefined') {
+            // Display the swap form if MetaMask is installed and connected
+            document.getElementById('swap-form').style.display = 'block';
+        } else {
+            // Display a message indicating that the visitor needs to install and connect MetaMask
+            document.getElementById('no-metamask').style.display = 'block';
+        }
+
+        // Get a reference to the swap form and the status message
+        const swapForm = document.getElementById('swap-form');
+        const statusMessage = document.getElementById('status');
+
+        // Handle the form submission event
+        swapForm.addEventListener('submit', async (event) => {
+            // Prevent the form from submitting
+            event.preventDefault();
+
+            // Get the amount of tokens the visitor wants to swap from the form input
+            const amount = document.getElementById('amount').value;
+
+            // Set the status message to indicate that the swap transaction is being processed
+            statusMessage.innerHTML = 'Processing swap...';
+
+            // Get the visitor's Ethereum address from MetaMask
+            const address = await ethereum.enable();
+
+            // Get the contract instance for the specified contract address
+            const contract = new web3.eth.Contract(ABI, '0x1Aa3aC0027b2870E03dE5094d69f2C5AD7CE9E23');
+
+            // Execute the swap function of the contract, passing in the visitor's Ethereum address and the amount of tokens they want to swap
+            const result = await contract.methods.swap(address, amount).send({ from: address });
+
+            // Check if the transaction was successful
+            if (result.status) {
+                // Set the status message to indicate that the swap was successful
+                statusMessage.innerHTML = 'Swap successful!';
+            } else {
+                // Set the status message to indicate that the swap failed
+                statusMessage.innerHTML = 'Swap failed.';
+            }
+        });
+    </script>
+</body>
+</html>
